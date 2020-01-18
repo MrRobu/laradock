@@ -1260,6 +1260,16 @@ RUN if [ ${INSTALL_GNU_PARALLEL} = true ]; then \
 
 RUN set -xe; php -v | head -n 1 | grep -q "PHP ${LARADOCK_PHP_VERSION}."
 
+###########################################################################
+# ZSH:
+###########################################################################
+
+ARG INSTALL_ZSH=true
+
+RUN if [ ${INSTALL_ZSH} = true ]; then \
+  apt-get install -y zsh \
+;fi
+
 #
 #--------------------------------------------------------------------------
 # Final Touch
