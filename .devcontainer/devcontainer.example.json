@@ -1,14 +1,52 @@
 {
-  "name": "Laradock",
+  "name": "Happerley England",
   "dockerComposeFile": "../docker-compose.yml",
+  // Use 'settings' to set *default* container specific settings.json values on container create. 
+  // You can edit these settings after create using File > Preferences > Settings > Remote.
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/zsh"
+  },
+  // Uncomment the next line to have VS Code connect as an existing non-root user in the container. 
+  // On Linux, by default, the container user's UID/GID will be updated to match your local user. See
+  // https://aka.ms/vscode-remote/containers/non-root for details on adding a non-root user if none exist.
   "remoteUser": "laradock",
   "runServices": [
     "nginx",
-    "postgres",
-    "pgadmin"
+    "mysql",
+    "redis"
   ],
   "service": "workspace",
   "workspaceFolder": "/var/www",
   "shutdownAction": "stopCompose",
-  "postCreateCommand": "uname -a"
+  // Uncomment the next line to run commands after the container is created.
+  // "postCreateCommand": "uname -a",
+  // Add the IDs of extensions you want installed when the container is created in the array below.
+  // (also install locally: "pkief.material-icon-theme", "cjhowe7.laravel-blade", "coenraads.bracket-pair-colorizer", "mikestead.dotenv")
+  "extensions": [
+    // PHP
+    "felixfbecker.php-intellisense",
+    "felixfbecker.php-debug",
+    "bmewburn.vscode-intelephense-client",
+    "neilbrayfield.php-docblocker",
+    "mehedidracula.php-namespace-resolver",
+    // Laravel
+    "onecentlin.laravel-blade",
+    "codingyu.laravel-goto-view",
+    "austenc.laravel-blade-spacer",
+    "amiralizadeh9480.laravel-extra-intellisense",
+    // Vue
+    "octref.vetur",
+    // Javascript
+    "dbaeumer.vscode-eslint",
+    "dbaeumer.jshint",
+    // Sass
+    "syler.sass-indented",
+    // CSS
+    "ecmel.vscode-html-css",
+    "zignd.html-css-class-completion",
+    // HTML
+    "formulahendry.auto-complete-tag",
+    // Gitlens
+    "eamodio.gitlens"
+  ]
 }
