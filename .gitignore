@@ -20,6 +20,3 @@
 .DS_Store
 
 docker-compose.yml
-
-/workspace/xdebug.ini
-/php-fpm/xdebug.ini
