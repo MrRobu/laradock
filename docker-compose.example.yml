@@ -288,31 +288,31 @@ services:
       networks:
         - backend
 ### Laravel Horizon ############################################
-    # laravel-horizon:
-    #   build:
-    #     context: ./laravel-horizon
-    #     args:
-    #       - CHANGE_SOURCE=${CHANGE_SOURCE}
-    #       - PHP_VERSION=${PHP_VERSION}
-    #       - INSTALL_PGSQL=${PHP_FPM_INSTALL_PGSQL}
-    #       - INSTALL_BCMATH=${PHP_FPM_INSTALL_BCMATH}
-    #       - INSTALL_MEMCACHED=${PHP_FPM_INSTALL_MEMCACHED}
-    #       - INSTALL_SOCKETS=${LARAVEL_HORIZON_INSTALL_SOCKETS}
-    #       - INSTALL_CASSANDRA=${PHP_FPM_INSTALL_CASSANDRA}
-    #       - INSTALL_PHPREDIS=${LARAVEL_HORIZON_INSTALL_PHPREDIS}
-    #       - INSTALL_MONGO=${LARAVEL_HORIZON_INSTALL_MONGO}
-    #       - INSTALL_FFMPEG=${LARAVEL_HORIZON_INSTALL_FFMPEG}
-    #       - PUID=${PHP_WORKER_PUID}
-    #       - PGID=${PHP_WORKER_PGID}
-    #   volumes:
-    #     - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
-    #     - ./laravel-horizon/supervisord.d:/etc/supervisord.d
-    #   depends_on:
-    #     - workspace
-    #   extra_hosts:
-    #     - "dockerhost:${DOCKER_HOST_IP}"
-    #   networks:
-    #     - backend
+    laravel-horizon:
+      build:
+        context: ./laravel-horizon
+        args:
+          - CHANGE_SOURCE=${CHANGE_SOURCE}
+          - PHP_VERSION=${PHP_VERSION}
+          - INSTALL_PGSQL=${PHP_FPM_INSTALL_PGSQL}
+          - INSTALL_BCMATH=${PHP_FPM_INSTALL_BCMATH}
+          - INSTALL_MEMCACHED=${PHP_FPM_INSTALL_MEMCACHED}
+          - INSTALL_SOCKETS=${LARAVEL_HORIZON_INSTALL_SOCKETS}
+          - INSTALL_CASSANDRA=${PHP_FPM_INSTALL_CASSANDRA}
+          - INSTALL_PHPREDIS=${LARAVEL_HORIZON_INSTALL_PHPREDIS}
+          - INSTALL_MONGO=${LARAVEL_HORIZON_INSTALL_MONGO}
+          - INSTALL_FFMPEG=${LARAVEL_HORIZON_INSTALL_FFMPEG}
+          - PUID=${PHP_WORKER_PUID}
+          - PGID=${PHP_WORKER_PGID}
+      volumes:
+        - workspace:${APP_CODE_PATH_CONTAINER} # - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ./laravel-horizon/supervisord.d:/etc/supervisord.d
+      depends_on:
+        - workspace
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+      networks:
+        - backend
 
 ### NGINX Server #########################################
     nginx:
@@ -1256,7 +1256,7 @@ services:
       image: docker:dind
       privileged: true
       volumes:
-        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - workspace:${APP_CODE_PATH_CONTAINER} # - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
         - dind:/var/lib/docker # - ${DATA_PATH_HOST}/dind:/var/lib/docker
       expose:
         - 2375
@@ -1677,4 +1677,3 @@ services:
     #     - ${DATA_PATH_HOST}/tomcat/webapps:/usr/local/tomcat/webapps
     #     - ${DATA_PATH_HOST}/tomcat/logs:/usr/local/tomcat/logs
     #   # restart: always
-
