@@ -6,15 +6,15 @@ networks:
   backend:
     driver: ${NETWORKS_DRIVER}
 
-# volumes:
+volumes:
   # workspace:
   #   driver: ${VOLUMES_DRIVER}
   #   driver_opts:
   #     type: none
   #     o: bind
   #     device: /path/to/app/code
-  # mysql:
-  #   driver: ${VOLUMES_DRIVER}
+  mysql:
+    driver: ${VOLUMES_DRIVER}
   # percona:
   #   driver: ${VOLUMES_DRIVER}
   # mssql:
@@ -23,8 +23,8 @@ networks:
   #   driver: ${VOLUMES_DRIVER}
   # memcached:
   #   driver: ${VOLUMES_DRIVER}
-  # redis:
-  #   driver: ${VOLUMES_DRIVER}
+  redis:
+    driver: ${VOLUMES_DRIVER}
   # neo4j:
   #   driver: ${VOLUMES_DRIVER}
   # mariadb:
@@ -55,8 +55,8 @@ networks:
   #   driver: ${VOLUMES_DRIVER}
   # graylog:
   #   driver: ${VOLUMES_DRIVER}
-  # dind:
-  #   driver: ${VOLUMES_DRIVER}
+  dind:
+    driver: ${VOLUMES_DRIVER}
 
 services:
 
@@ -152,8 +152,8 @@ services:
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ./php-worker/supervisord.d:/etc/supervisord.d
-        # - ~/.ssh:/root/.ssh
-        # - ~/.ssh:/home/laradock/.ssh
+        - ~/.ssh:/root/.ssh
+        - ~/.ssh:/home/laradock/.ssh
         # - ~/.zshrc:/root/.zshrc
         # - ~/.zshrc:/home/laradock/.zshrc
         # - ~/.oh-my-zsh:/root/.oh-my-zsh
@@ -417,7 +417,7 @@ services:
         - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
         - TZ=${WORKSPACE_TIMEZONE}
       volumes:
-        - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+        - mysql:/var/lib/mysql # ${DATA_PATH_HOST}/mysql:/var/lib/mysql
         - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
       ports:
         - "${MYSQL_PORT}:3306"
@@ -563,7 +563,7 @@ services:
     redis:
       build: ./redis
       volumes:
-        - ${DATA_PATH_HOST}/redis:/data
+        - redis:/data # ${DATA_PATH_HOST}/redis:/data
       ports:
         - "${REDIS_PORT}:6379"
       networks:
@@ -1261,7 +1261,7 @@ services:
       privileged: true
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
-        - ${DATA_PATH_HOST}/dind:/var/lib/docker
+        - dind:/var/lib/docker # ${DATA_PATH_HOST}/dind:/var/lib/docker
       expose:
         - 2375
       networks:
