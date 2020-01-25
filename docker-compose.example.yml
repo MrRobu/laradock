@@ -6,11 +6,15 @@ networks:
   backend:
     driver: ${NETWORKS_DRIVER}
 
-volumes:
-  workspace:
-    driver: ${VOLUMES_DRIVER}
-  mysql:
-    driver: ${VOLUMES_DRIVER}
+# volumes:
+  # workspace:
+  #   driver: ${VOLUMES_DRIVER}
+  #   driver_opts:
+  #     type: none
+  #     o: bind
+  #     device: /path/to/app/code
+  # mysql:
+  #   driver: ${VOLUMES_DRIVER}
   # percona:
   #   driver: ${VOLUMES_DRIVER}
   # mssql:
@@ -19,8 +23,8 @@ volumes:
   #   driver: ${VOLUMES_DRIVER}
   # memcached:
   #   driver: ${VOLUMES_DRIVER}
-  redis:
-    driver: ${VOLUMES_DRIVER}
+  # redis:
+  #   driver: ${VOLUMES_DRIVER}
   # neo4j:
   #   driver: ${VOLUMES_DRIVER}
   # mariadb:
@@ -51,8 +55,8 @@ volumes:
   #   driver: ${VOLUMES_DRIVER}
   # graylog:
   #   driver: ${VOLUMES_DRIVER}
-  dind:
-    driver: ${VOLUMES_DRIVER}
+  # dind:
+  #   driver: ${VOLUMES_DRIVER}
 
 services:
 
@@ -146,7 +150,7 @@ services:
           - https_proxy
           - no_proxy
       volumes:
-        - workspace:${APP_CODE_PATH_CONTAINER} # - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ./php-worker/supervisord.d:/etc/supervisord.d
         # - ~/.ssh:/root/.ssh
         # - ~/.ssh:/home/laradock/.ssh
@@ -237,7 +241,7 @@ services:
           - no_proxy
       volumes:
         - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
-        - workspace:${APP_CODE_PATH_CONTAINER} # - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
       expose:
         - "9000"
       extra_hosts:
@@ -279,7 +283,7 @@ services:
           - PUID=${PHP_WORKER_PUID}
           - PGID=${PHP_WORKER_PGID}
       volumes:
-        - workspace:${APP_CODE_PATH_CONTAINER} # - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ./php-worker/supervisord.d:/etc/supervisord.d
       depends_on:
         - workspace
@@ -305,7 +309,7 @@ services:
           - PUID=${PHP_WORKER_PUID}
           - PGID=${PHP_WORKER_PGID}
       volumes:
-        - workspace:${APP_CODE_PATH_CONTAINER} # - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ./laravel-horizon/supervisord.d:/etc/supervisord.d
       depends_on:
         - workspace
@@ -326,7 +330,7 @@ services:
           - https_proxy
           - no_proxy
       volumes:
-        - workspace:${APP_CODE_PATH_CONTAINER} # - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
         - ${NGINX_SITES_PATH}:/etc/nginx/sites-available
         - ${NGINX_SSL_PATH}:/etc/nginx/ssl
@@ -413,7 +417,7 @@ services:
         - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
         - TZ=${WORKSPACE_TIMEZONE}
       volumes:
-        - mysql:/var/lib/mysql # - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+        - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
         - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
       ports:
         - "${MYSQL_PORT}:3306"
@@ -559,7 +563,7 @@ services:
     redis:
       build: ./redis
       volumes:
-        - redis:/data # - ${DATA_PATH_HOST}/redis:/data
+        - ${DATA_PATH_HOST}/redis:/data
       ports:
         - "${REDIS_PORT}:6379"
       networks:
@@ -1256,8 +1260,8 @@ services:
       image: docker:dind
       privileged: true
       volumes:
-        - workspace:${APP_CODE_PATH_CONTAINER} # - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
-        - dind:/var/lib/docker # - ${DATA_PATH_HOST}/dind:/var/lib/docker
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - ${DATA_PATH_HOST}/dind:/var/lib/docker
       expose:
         - 2375
       networks:
